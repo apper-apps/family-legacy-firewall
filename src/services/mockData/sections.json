@@ -1,0 +1,98 @@
+[
+  {
+    "Id": 1,
+    "title": "Reason to Begin",
+    "subtitle": "Why Are We in Business Together?",
+    "order": 1,
+    "questions": [
+      {
+        "Id": 1,
+        "text": "What was the original heartbeat behind this business? Why did we start—or why are we still here?"
+      },
+      {
+        "Id": 2,
+        "text": "If your children or grandchildren asked, \"Why does our family own this business?\"—what would you say?"
+      },
+      {
+        "Id": 3,
+        "text": "What values must we never compromise, even when things get tough?"
+      },
+      {
+        "Id": 4,
+        "text": "What does success look like for our family business beyond just financial returns?"
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "title": "Business Type",
+    "subtitle": "End Game Thinking - Ownership & Future",
+    "order": 2,
+    "questions": [
+      {
+        "Id": 5,
+        "text": "Do I want us to keep this business for generations, or prepare to sell one day? Why?"
+      },
+      {
+        "Id": 6,
+        "text": "What kind of role do I want—operator, owner, investor, supporter?"
+      },
+      {
+        "Id": 7,
+        "text": "Who should be allowed to own shares—and who shouldn't? Where do I draw the line, and why?"
+      },
+      {
+        "Id": 8,
+        "text": "What criteria should determine someone's eligibility for business ownership in our family?"
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "title": "Expectations",
+    "subtitle": "The Three Circles & Beyond - Roles & Responsibility",
+    "order": 3,
+    "questions": [
+      {
+        "Id": 9,
+        "text": "Where do I sit today—Family, Business, Ownership? Am I clear about that?"
+      },
+      {
+        "Id": 10,
+        "text": "Do I believe we have a clear succession plan—or are we hoping things just work out?"
+      },
+      {
+        "Id": 11,
+        "text": "What do I expect from other family members—and what do I think they expect of me?"
+      },
+      {
+        "Id": 12,
+        "text": "How should performance and contribution be measured for family members vs. non-family members?"
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "title": "Extinction",
+    "subtitle": "What Could Go Wrong? - Risk & Resilience",
+    "order": 4,
+    "questions": [
+      {
+        "Id": 13,
+        "text": "What's the biggest threat to our family staying united in business?"
+      },
+      {
+        "Id": 14,
+        "text": "Where are we strong—and where are we vulnerable—when it comes to people, money, skills, and relationships?"
+      },
+      {
+        "Id": 15,
+        "text": "Who makes the tough calls in our family business today?"
+      },
+      {
+        "Id": 16,
+        "text": "What contingency plans do we have if key family members leave or become unable to participate?"
+      }
+    ]
+  }
+]

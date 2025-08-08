@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@example.com",
+    "role": "participant",
+    "createdAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "name": "Michael Chen",
+    "email": "michael.chen@example.com",
+    "role": "participant",
+    "createdAt": "2024-01-18T10:30:00.000Z"
+  },
+  {
+    "Id": 3,
+    "name": "Emily Rodriguez",
+    "email": "emily.rodriguez@example.com",
+    "role": "participant",
+    "createdAt": "2024-01-22T14:15:00.000Z"
+  },
+  {
+    "Id": 4,
+    "name": "David Thompson",
+    "email": "david.thompson@example.com",
+    "role": "participant",
+    "createdAt": "2024-01-25T09:45:00.000Z"
+  },
+  {
+    "Id": 5,
+    "name": "Lisa Wang",
+    "email": "lisa.wang@example.com",
+    "role": "participant",
+    "createdAt": "2024-01-28T16:20:00.000Z"
+  },
+  {
+    "Id": 6,
+    "name": "Administrator",
+    "email": "admin@familylegacy.com",
+    "role": "admin",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "Id": 1,
+    "userId": 1,
+    "sectionId": 1,
+    "completionPercentage": 100,
+    "lastUpdated": "2024-01-16T10:45:00.000Z"
+  },
+  {
+    "Id": 2,
+    "userId": 1,
+    "sectionId": 2,
+    "completionPercentage": 50,
+    "lastUpdated": "2024-01-17T14:25:00.000Z"
+  },
+  {
+    "Id": 3,
+    "userId": 1,
+    "sectionId": 3,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "Id": 4,
+    "userId": 1,
+    "sectionId": 4,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "Id": 5,
+    "userId": 2,
+    "sectionId": 1,
+    "completionPercentage": 50,
+    "lastUpdated": "2024-01-19T11:20:00.000Z"
+  },
+  {
+    "Id": 6,
+    "userId": 2,
+    "sectionId": 2,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-18T10:30:00.000Z"
+  },
+  {
+    "Id": 7,
+    "userId": 2,
+    "sectionId": 3,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-18T10:30:00.000Z"
+  },
+  {
+    "Id": 8,
+    "userId": 2,
+    "sectionId": 4,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-18T10:30:00.000Z"
+  },
+  {
+    "Id": 9,
+    "userId": 3,
+    "sectionId": 1,
+    "completionPercentage": 25,
+    "lastUpdated": "2024-01-23T09:30:00.000Z"
+  },
+  {
+    "Id": 10,
+    "userId": 3,
+    "sectionId": 2,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-22T14:15:00.000Z"
+  },
+  {
+    "Id": 11,
+    "userId": 3,
+    "sectionId": 3,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-22T14:15:00.000Z"
+  },
+  {
+    "Id": 12,
+    "userId": 3,
+    "sectionId": 4,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-22T14:15:00.000Z"
+  },
+  {
+    "Id": 13,
+    "userId": 4,
+    "sectionId": 1,
+    "completionPercentage": 75,
+    "lastUpdated": "2024-01-26T12:00:00.000Z"
+  },
+  {
+    "Id": 14,
+    "userId": 4,
+    "sectionId": 2,
+    "completionPercentage": 25,
+    "lastUpdated": "2024-01-26T15:30:00.000Z"
+  },
+  {
+    "Id": 15,
+    "userId": 4,
+    "sectionId": 3,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-25T09:45:00.000Z"
+  },
+  {
+    "Id": 16,
+    "userId": 4,
+    "sectionId": 4,
+    "completionPercentage": 0,
+    "lastUpdated": "2024-01-25T09:45:00.000Z"
+  },
+  {
+    "Id": 17,
+    "userId": 5,
+    "sectionId": 1,
+    "completionPercentage": 100,
+    "lastUpdated": "2024-01-29T11:45:00.000Z"
+  },
+  {
+    "Id": 18,
+    "userId": 5,
+    "sectionId": 2,
+    "completionPercentage": 100,
+    "lastUpdated": "2024-01-29T16:20:00.000Z"
+  },
+  {
+    "Id": 19,
+    "userId": 5,
+    "sectionId": 3,
+    "completionPercentage": 75,
+    "lastUpdated": "2024-01-30T10:15:00.000Z"
+  },
+  {
+    "Id": 20,
+    "userId": 5,
+    "sectionId": 4,
+    "completionPercentage": 25,
+    "lastUpdated": "2024-01-30T14:30:00.000Z"
+  }
+]

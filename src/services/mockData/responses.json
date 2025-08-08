@@ -1,0 +1,83 @@
+[
+  {
+    "Id": 1,
+    "userId": 1,
+    "sectionId": 1,
+    "questionId": 1,
+    "answer": "Our family business started with my grandfather's dream to provide quality services to our community while creating opportunities for future generations. We're still here because we believe in building something lasting that goes beyond profit - it's about legacy, family values, and making a positive impact.",
+    "lastSaved": "2024-01-16T10:30:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 2,
+    "userId": 1,
+    "sectionId": 1,
+    "questionId": 2,
+    "answer": "I would tell them that our family business represents the culmination of three generations of hard work, values, and dreams. We own this business not just for financial security, but to preserve family traditions, create opportunities for future generations, and continue serving our community with integrity and excellence.",
+    "lastSaved": "2024-01-16T10:35:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 3,
+    "userId": 1,
+    "sectionId": 1,
+    "questionId": 3,
+    "answer": "Integrity, family unity, and customer service excellence are non-negotiables. We will never compromise on treating employees fairly, maintaining quality standards, or putting short-term profits over long-term relationships and reputation.",
+    "lastSaved": "2024-01-16T10:40:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 4,
+    "userId": 1,
+    "sectionId": 1,
+    "questionId": 4,
+    "answer": "Success means financial sustainability that supports all family members involved, but also includes community respect, employee satisfaction, and the knowledge that we're building something meaningful for future generations. It's measured by both profit and purpose.",
+    "lastSaved": "2024-01-16T10:45:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 5,
+    "userId": 2,
+    "sectionId": 1,
+    "questionId": 1,
+    "answer": "The business was founded on the principle of family unity and creating something that would last beyond any individual member. My father always said we're stewards, not just owners, and that perspective has guided us through challenges and growth.",
+    "lastSaved": "2024-01-19T11:15:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 6,
+    "userId": 2,
+    "sectionId": 1,
+    "questionId": 2,
+    "answer": "I'd explain that this business is their heritage and responsibility. It represents the sacrifices and vision of those who came before them, and it's their chance to contribute to something bigger than themselves while maintaining family traditions.",
+    "lastSaved": "2024-01-19T11:20:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 7,
+    "userId": 3,
+    "sectionId": 1,
+    "questionId": 1,
+    "answer": "We began because we saw an opportunity to serve our community while keeping our family together through shared purpose. The business has evolved, but the core mission of family unity and community service remains our driving force.",
+    "lastSaved": "2024-01-23T09:30:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 8,
+    "userId": 1,
+    "sectionId": 2,
+    "questionId": 5,
+    "answer": "I want us to keep this business for generations, but with the flexibility to adapt and evolve. The goal isn't just preservation, but transformation - ensuring each generation adds value and finds purpose in the business while maintaining our core values.",
+    "lastSaved": "2024-01-17T14:20:00.000Z",
+    "isComplete": true
+  },
+  {
+    "Id": 9,
+    "userId": 1,
+    "sectionId": 2,
+    "questionId": 6,
+    "answer": "I see myself transitioning from operator to advisor/supporter as the next generation takes on more responsibility. I want to remain involved in strategic decisions while giving them operational freedom to grow and innovate.",
+    "lastSaved": "2024-01-17T14:25:00.000Z",
+    "isComplete": true
+  }
+]
