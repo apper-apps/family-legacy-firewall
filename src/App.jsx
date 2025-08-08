@@ -22,16 +22,6 @@ const handleLogin = (user) => {
     setCurrentUser(null);
   };
 
-  const handleRoleSwitch = (newRole) => {
-    const mockUser = {
-      Id: newRole === "admin" ? 6 : 1,
-      name: newRole === "admin" ? "Administrator" : "Sarah Johnson",
-      email: newRole === "admin" ? "admin@familylegacy.com" : "sarah.johnson@example.com",
-      role: newRole,
-      createdAt: new Date().toISOString()
-    };
-    setCurrentUser(mockUser);
-  };
 
   return (
     <BrowserRouter>
@@ -52,7 +42,6 @@ const handleLogin = (user) => {
             <div className="min-h-screen bg-gray-50">
               <Header 
 currentUser={currentUser} 
-                onRoleSwitch={handleRoleSwitch}
                 onLogout={handleLogout}
               />
               

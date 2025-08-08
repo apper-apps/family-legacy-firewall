@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 
-const Header = ({ currentUser, onRoleSwitch, onLogout }) => {
+const Header = ({ currentUser, onLogout }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,11 +17,6 @@ const Header = ({ currentUser, onRoleSwitch, onLogout }) => {
     return "Family Legacy";
   };
 
-const handleRoleSwitch = () => {
-    const newRole = currentUser?.role === "admin" ? "participant" : "admin";
-    onRoleSwitch?.(newRole);
-    navigate(newRole === "admin" ? "/admin" : "/dashboard");
-  };
 
   const handleLogout = () => {
     onLogout?.();
@@ -61,15 +56,6 @@ const handleRoleSwitch = () => {
                   </p>
                 </div>
                 
-                <Button
-onClick={handleRoleSwitch}
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center space-x-2 mr-2"
-                >
-                  <ApperIcon name="RefreshCw" size={14} />
-                  <span>Switch Role</span>
-                </Button>
                 <Button
                   onClick={handleLogout}
                   variant="outline"
