@@ -9,6 +9,7 @@ import ApperIcon from "@/components/ApperIcon";
 import { sectionsService } from "@/services/api/sectionsService";
 import { responsesService } from "@/services/api/responsesService";
 import { progressService } from "@/services/api/progressService";
+import { notificationService } from "@/services/api/notificationService";
 import { toast } from "react-toastify";
 
 const SectionQuestions = ({ currentUser }) => {
@@ -99,8 +100,8 @@ const SectionQuestions = ({ currentUser }) => {
     }
     
     try {
-      await progressService.updateProgress(currentUser.Id, parseInt(sectionId), 100);
-      toast.success("Section completed successfully!");
+await progressService.updateProgress(currentUser.Id, parseInt(sectionId), 100);
+      toast.success("Section completed successfully! Admins have been notified.");
       navigate("/dashboard");
     } catch (err) {
       toast.error("Failed to complete section");

@@ -1,4 +1,5 @@
 import progressData from "@/services/mockData/progress.json";
+import { notificationService } from '@/services/api/notificationService';
 
 class ProgressService {
   constructor() {
@@ -22,7 +23,7 @@ class ProgressService {
     return this.progress.find(p => p.userId === userId && p.sectionId === sectionId) || null;
   }
 
-  async updateProgress(userId, sectionId, completionPercentage) {
+async updateProgress(userId, sectionId, completionPercentage) {
     await this.delay(300);
     
     const existingIndex = this.progress.findIndex(
@@ -36,13 +37,16 @@ class ProgressService {
       lastUpdated: new Date().toISOString()
     };
 
+    let updatedProgress;
+    const wasCompleted = existingIndex !== -1 && this.progress[existingIndex].completionPercentage === 100;
+    
     if (existingIndex !== -1) {
       // Update existing progress
       this.progress[existingIndex] = {
         ...this.progress[existingIndex],
         ...progressData
       };
-      return { ...this.progress[existingIndex] };
+      updatedProgress = { ...this.progress[existingIndex] };
     } else {
       // Create new progress entry
       const newProgress = {
@@ -50,8 +54,20 @@ class ProgressService {
         ...progressData
       };
       this.progress.push(newProgress);
-      return { ...newProgress };
+      updatedProgress = { ...newProgress };
     }
+
+    // Send notification to admins when section is completed for the first time
+    if (completionPercentage === 100 && !wasCompleted) {
+      try {
+        await notificationService.sendSectionCompletionNotification(userId, sectionId);
+      } catch (error) {
+        console.error('Failed to send completion notification:', error);
+        // Don't fail the progress update if notification fails
+      }
+    }
+
+    return updatedProgress;
   }
 
   delay(ms) {
