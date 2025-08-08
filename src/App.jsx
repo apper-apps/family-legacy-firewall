@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import Header from "@/components/organisms/Header";
 
 // Page Components
-import RoleSelection from "@/components/pages/RoleSelection";
+import Login from "@/components/pages/Login";
 import Dashboard from "@/components/pages/Dashboard";
 import SectionQuestions from "@/components/pages/SectionQuestions";
 import ParticipantDetail from "@/components/pages/ParticipantDetail";
@@ -14,16 +14,12 @@ import ParticipantDetail from "@/components/pages/ParticipantDetail";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
-  const handleRoleSelect = (role) => {
-    // Create a mock user based on role selection
-    const mockUser = {
-      Id: role === "admin" ? 6 : 1,
-      name: role === "admin" ? "Administrator" : "Sarah Johnson",
-      email: role === "admin" ? "admin@familylegacy.com" : "sarah.johnson@example.com",
-      role: role,
-      createdAt: new Date().toISOString()
-    };
-    setCurrentUser(mockUser);
+const handleLogin = (user) => {
+    setCurrentUser(user);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
   };
 
   const handleRoleSwitch = (newRole) => {
@@ -41,13 +37,13 @@ const App = () => {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route 
+<Route 
             path="/" 
             element={
               currentUser ? (
                 <Navigate to="/dashboard" replace />
               ) : (
-                <RoleSelection onRoleSelect={handleRoleSelect} />
+                <Login onLogin={handleLogin} />
               )
             } 
           />
@@ -55,8 +51,9 @@ const App = () => {
           <Route path="/*" element={
             <div className="min-h-screen bg-gray-50">
               <Header 
-                currentUser={currentUser} 
-                onRoleSwitch={handleRoleSwitch} 
+currentUser={currentUser} 
+                onRoleSwitch={handleRoleSwitch}
+                onLogout={handleLogout}
               />
               
               <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
