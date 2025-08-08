@@ -10,7 +10,7 @@ import Login from "@/components/pages/Login";
 import Dashboard from "@/components/pages/Dashboard";
 import SectionQuestions from "@/components/pages/SectionQuestions";
 import ParticipantDetail from "@/components/pages/ParticipantDetail";
-
+import ParticipantProfile from "@/components/pages/ParticipantProfile";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -46,10 +46,20 @@ currentUser={currentUser}
               />
               
               <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Routes>
+<Routes>
                   <Route 
                     path="/dashboard" 
                     element={<Dashboard currentUser={currentUser} />} 
+                  />
+                  <Route 
+                    path="/profile" 
+                    element={
+                      currentUser?.role === "participant" ? (
+                        <ParticipantProfile currentUser={currentUser} />
+                      ) : (
+                        <Navigate to="/dashboard" replace />
+                      )
+                    } 
                   />
                   <Route 
                     path="/admin" 

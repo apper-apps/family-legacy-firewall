@@ -1,4 +1,5 @@
 import usersData from "@/services/mockData/users.json";
+import { notificationService } from "@/services/api/notificationService";
 
 let users = [...usersData];
 class UsersService {
@@ -39,7 +40,7 @@ class UsersService {
     return { ...newUser };
   }
 
-  async update(id, userData) {
+async update(id, userData) {
     // Validate id parameter
     if (!Number.isInteger(id) || id <= 0) {
       throw new Error('Invalid user ID');
@@ -51,6 +52,7 @@ class UsersService {
       throw new Error('User not found');
     }
 
+    const originalUser = { ...users[userIndex] };
     const updatedUser = {
       ...users[userIndex],
       ...userData,
@@ -62,6 +64,16 @@ class UsersService {
     
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // Send notification to admins if this is a participant profile update
+    if (updatedUser.role === 'participant') {
+      try {
+        await notificationService.sendProfileUpdateNotification(id, originalUser, updatedUser);
+      } catch (error) {
+        console.error('Failed to send profile update notification:', error);
+        // Don't fail the update if notification fails
+      }
+    }
     
     return { ...updatedUser };
   }

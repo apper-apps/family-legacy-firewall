@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { sectionsService } from "@/services/api/sectionsService";
+import { progressService } from "@/services/api/progressService";
+import ApperIcon from "@/components/ApperIcon";
 import SectionCard from "@/components/molecules/SectionCard";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
-import { sectionsService } from "@/services/api/sectionsService";
-import { progressService } from "@/services/api/progressService";
 
 const ParticipantDashboard = ({ currentUser }) => {
   const [sections, setSections] = useState([]);
@@ -62,13 +63,24 @@ const ParticipantDashboard = ({ currentUser }) => {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-primary-500 via-primary-600 to-secondary-600 rounded-2xl p-8 text-white">
-        <h2 className="font-display text-3xl font-bold mb-2">
-          Welcome back, {currentUser?.name}
-        </h2>
-        <p className="text-primary-100 mb-6">
-          Continue your family business journey by exploring the four foundational pillars.
-        </p>
+<div className="bg-gradient-to-r from-primary-500 via-primary-600 to-secondary-600 rounded-2xl p-8 text-white">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="font-display text-3xl font-bold mb-2">
+              Welcome back, {currentUser?.name}
+            </h2>
+            <p className="text-primary-100 mb-6">
+              Continue your family business journey by exploring the four foundational pillars.
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.href = '/profile'}
+            className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+          >
+            <ApperIcon name="Settings" size={16} />
+            Edit Profile
+          </button>
+        </div>
         <div className="flex items-center space-x-6">
           <div className="text-center">
             <div className="text-2xl font-bold">{Math.round(totalProgress)}%</div>
