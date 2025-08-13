@@ -34,7 +34,7 @@ class AuthService {
   validatePassword(user, password) {
     // Simple password validation based on role and email
     // In a real app, this would check against hashed passwords
-    if (user.role === 'admin' && user.email === 'admin@familylegacy.com') {
+if (user.role === 'admin' && user.email === 'vivek.b@companyhub.com') {
       return password === 'admin123';
     }
     
