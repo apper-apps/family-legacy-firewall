@@ -196,5 +196,3 @@ class ProgressService {
 }
 
 export const progressService = new ProgressService();
-
-export const progressService = new ProgressService();
