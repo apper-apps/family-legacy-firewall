@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Button from "@/components/atoms/Button";
+import { useSelector } from "react-redux";
+import { AuthContext } from "@/contexts/AuthContext";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
 
-const Header = ({ currentUser, onLogout }) => {
+const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+  const currentUser = useSelector((state) => state.user.user);
 
   const getPageTitle = () => {
     const path = location.pathname;
@@ -17,10 +21,12 @@ const Header = ({ currentUser, onLogout }) => {
     return "Family Legacy";
   };
 
-
-  const handleLogout = () => {
-    onLogout?.();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -30,7 +36,7 @@ const Header = ({ currentUser, onLogout }) => {
           <div className="flex items-center">
             <div 
               className="flex items-center space-x-3 cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/dashboard")}
             >
               <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-2 rounded-lg">
                 <ApperIcon name="Home" size={20} className="text-white" />
@@ -49,10 +55,10 @@ const Header = ({ currentUser, onLogout }) => {
               <>
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-900">
-                    {currentUser.name}
+                    {currentUser.Name || currentUser.firstName || 'User'}
                   </p>
                   <p className="text-xs text-gray-500 capitalize">
-                    {currentUser.role}
+                    {currentUser.role_c || currentUser.role || 'participant'}
                   </p>
                 </div>
                 
@@ -73,5 +79,4 @@ const Header = ({ currentUser, onLogout }) => {
     </header>
   );
 };
-
 export default Header;

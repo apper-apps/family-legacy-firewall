@@ -1,81 +1,279 @@
-import responsesData from "@/services/mockData/responses.json";
+import { toast } from 'react-toastify';
 
 class ResponsesService {
   constructor() {
-    this.responses = [...responsesData];
+    // Initialize ApperClient
+    const { ApperClient } = window.ApperSDK;
+    this.apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+    this.tableName = 'response_c';
   }
 
   async getAll() {
-    await this.delay(200);
-    return [...this.responses];
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "answer_c" } },
+          { field: { Name: "last_saved_c" } },
+          { field: { Name: "is_complete_c" } },
+          { 
+            field: { Name: "user_id_c" },
+            referenceField: { field: { Name: "Name" } }
+          },
+          { 
+            field: { Name: "section_id_c" },
+            referenceField: { field: { Name: "Name" } }
+          },
+          { 
+            field: { Name: "question_id_c" },
+            referenceField: { field: { Name: "Name" } }
+          }
+        ],
+        orderBy: [{ fieldName: "last_saved_c", sorttype: "DESC" }]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching responses:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async getById(id) {
-    await this.delay(200);
-    const response = this.responses.find(r => r.Id === id);
-    if (!response) {
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "answer_c" } },
+          { field: { Name: "last_saved_c" } },
+          { field: { Name: "is_complete_c" } },
+          { field: { Name: "user_id_c" } },
+          { field: { Name: "section_id_c" } },
+          { field: { Name: "question_id_c" } }
+        ]
+      };
+
+      const response = await this.apperClient.getRecordById(this.tableName, id, params);
+      
+      if (!response || !response.data) {
+        throw new Error("Response not found");
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error(`Error fetching response with ID ${id}:`, error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
       throw new Error("Response not found");
     }
-    return { ...response };
   }
 
   async getByUserId(userId) {
-    await this.delay(200);
-    return this.responses
-      .filter(r => r.userId === userId)
-      .map(r => ({ ...r }));
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "answer_c" } },
+          { field: { Name: "last_saved_c" } },
+          { field: { Name: "is_complete_c" } },
+          { field: { Name: "user_id_c" } },
+          { field: { Name: "section_id_c" } },
+          { field: { Name: "question_id_c" } }
+        ],
+        where: [
+          {
+            FieldName: "user_id_c",
+            Operator: "EqualTo",
+            Values: [parseInt(userId)]
+          }
+        ]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching responses by user:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async getByUserAndSection(userId, sectionId) {
-    await this.delay(200);
-    return this.responses
-      .filter(r => r.userId === userId && r.sectionId === sectionId)
-      .map(r => ({ ...r }));
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "answer_c" } },
+          { field: { Name: "last_saved_c" } },
+          { field: { Name: "is_complete_c" } },
+          { field: { Name: "user_id_c" } },
+          { field: { Name: "section_id_c" } },
+          { field: { Name: "question_id_c" } }
+        ],
+        where: [
+          {
+            FieldName: "user_id_c",
+            Operator: "EqualTo",
+            Values: [parseInt(userId)]
+          },
+          {
+            FieldName: "section_id_c",
+            Operator: "EqualTo",
+            Values: [parseInt(sectionId)]
+          }
+        ]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching responses by user and section:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async saveResponse(responseData) {
-    await this.delay(300);
-    
-    // Check if response already exists
-    const existingIndex = this.responses.findIndex(
-      r => r.userId === responseData.userId && 
-           r.sectionId === responseData.sectionId && 
-           r.questionId === responseData.questionId
-    );
+    try {
+      // First check if response exists
+      const existingResponses = await this.getByUserAndSection(responseData.user_id_c, responseData.section_id_c);
+      const existingResponse = existingResponses.find(r => r.question_id_c === responseData.question_id_c);
+      
+      if (existingResponse) {
+        // Update existing response
+        const params = {
+          records: [
+            {
+              Id: existingResponse.Id,
+              answer_c: responseData.answer_c,
+              last_saved_c: new Date().toISOString(),
+              is_complete_c: responseData.answer_c && responseData.answer_c.trim() !== ""
+            }
+          ]
+        };
 
-    if (existingIndex !== -1) {
-      // Update existing response
-      this.responses[existingIndex] = {
-        ...this.responses[existingIndex],
-        answer: responseData.answer,
-        lastSaved: new Date().toISOString()
-      };
-      return { ...this.responses[existingIndex] };
-    } else {
-      // Create new response
-      const newResponse = {
-        Id: Math.max(...this.responses.map(r => r.Id), 0) + 1,
-        ...responseData,
-        lastSaved: new Date().toISOString(),
-        isComplete: responseData.answer && responseData.answer.trim() !== ""
-      };
-      this.responses.push(newResponse);
-      return { ...newResponse };
+        const response = await this.apperClient.updateRecord(this.tableName, params);
+        
+        if (!response.success) {
+          console.error(response.message);
+          toast.error(response.message);
+          return null;
+        }
+
+        if (response.results && response.results.length > 0 && response.results[0].success) {
+          return response.results[0].data;
+        }
+      } else {
+        // Create new response
+        const params = {
+          records: [
+            {
+              Name: responseData.Name || `Response ${Date.now()}`,
+              answer_c: responseData.answer_c,
+              last_saved_c: new Date().toISOString(),
+              is_complete_c: responseData.answer_c && responseData.answer_c.trim() !== "",
+              user_id_c: parseInt(responseData.user_id_c),
+              section_id_c: parseInt(responseData.section_id_c),
+              question_id_c: parseInt(responseData.question_id_c)
+            }
+          ]
+        };
+
+        const response = await this.apperClient.createRecord(this.tableName, params);
+        
+        if (!response.success) {
+          console.error(response.message);
+          toast.error(response.message);
+          return null;
+        }
+
+        if (response.results && response.results.length > 0 && response.results[0].success) {
+          return response.results[0].data;
+        }
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error saving response:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return null;
     }
   }
 
-  async delete(id) {
-    await this.delay(200);
-    const index = this.responses.findIndex(r => r.Id === id);
-    if (index === -1) {
-      throw new Error("Response not found");
-    }
-    const deleted = this.responses.splice(index, 1)[0];
-    return { ...deleted };
-  }
+  async delete(recordIds) {
+    try {
+      const params = {
+        RecordIds: Array.isArray(recordIds) ? recordIds : [recordIds]
+      };
 
-  delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+      const response = await this.apperClient.deleteRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return false;
+      }
+
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete response records:${JSON.stringify(failedDeletions)}`);
+          
+          failedDeletions.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        return successfulDeletions.length === params.RecordIds.length;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error deleting responses:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return false;
+    }
   }
 }
 

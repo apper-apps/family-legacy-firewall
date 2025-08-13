@@ -16,14 +16,14 @@ const SectionCard = ({ section, progress = 0, userRole = "participant" }) => {
     }
   };
 
-  const getIcon = (sectionId) => {
+  const getIcon = (sectionOrder) => {
     const icons = {
       1: "Heart",
       2: "Building2",
       3: "Target",
       4: "Shield"
     };
-    return icons[sectionId] || "FileText";
+    return icons[sectionOrder] || "FileText";
   };
 
   const isComplete = progress === 100;
@@ -35,17 +35,17 @@ const SectionCard = ({ section, progress = 0, userRole = "participant" }) => {
           <div className="flex items-center space-x-4">
             <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-3 rounded-lg">
               <ApperIcon 
-                name={getIcon(section.Id)} 
+                name={getIcon(section.order_c)} 
                 size={24} 
                 className="text-primary-600" 
               />
             </div>
             <div>
               <h3 className="font-display text-lg font-semibold text-gray-900 mb-1">
-                {section.title}
+                {section.title_c}
               </h3>
               <p className="text-sm text-gray-600">
-                {section.subtitle}
+                {section.subtitle_c}
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ const SectionCard = ({ section, progress = 0, userRole = "participant" }) => {
         
         <div className="mb-6">
           <p className="text-sm text-gray-500 mb-2">
-            {section.questions.length} questions
+            {section.questions?.length || 0} questions
           </p>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 

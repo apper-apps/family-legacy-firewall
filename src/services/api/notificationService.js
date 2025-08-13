@@ -28,29 +28,29 @@ class NotificationService {
       ]);
 
       const notificationData = {
-        participantName: user.name,
-        participantEmail: user.email,
-        sectionTitle: section.title,
-        sectionNumber: section.order,
+        participantName: user.Name,
+        participantEmail: user.email_c,
+        sectionTitle: section.title_c,
+        sectionNumber: section.order_c,
         completionTime: new Date().toLocaleString(),
         completionDate: new Date().toLocaleDateString()
       };
 
       // Send notifications to all admin users
       const notificationPromises = admins.map(admin => 
-        this.sendEmailNotification(admin.email, notificationData, 'section')
+        this.sendEmailNotification(admin.email_c, notificationData, 'section')
       );
 
       await Promise.all(notificationPromises);
       
       // Log notification for debugging
-      console.log(`Sent section completion notifications for ${user.name} completing ${section.title}`);
+      console.log(`Sent section completion notifications for ${user.Name} completing ${section.title_c}`);
       
       return {
         success: true,
         recipientCount: admins.length,
-        participant: user.name,
-        section: section.title
+        participant: user.Name,
+        section: section.title_c
       };
       
     } catch (error) {
@@ -65,9 +65,9 @@ class NotificationService {
       
       const admins = await this.getAdminUsers();
 
-      // Identify changed fields
+      // Identify changed fields with database field names
       const changes = [];
-      const fieldsToCheck = ['name', 'email', 'phone', 'company', 'position'];
+      const fieldsToCheck = ['Name', 'email_c', 'phone_c', 'company_c', 'position_c'];
       
       fieldsToCheck.forEach(field => {
         if (originalUser[field] !== updatedUser[field]) {
@@ -84,8 +84,8 @@ class NotificationService {
       }
 
       const notificationData = {
-        participantName: updatedUser.name,
-        participantEmail: updatedUser.email,
+        participantName: updatedUser.Name,
+        participantEmail: updatedUser.email_c,
         participantId: userId,
         updateTime: new Date().toLocaleString(),
         updateDate: new Date().toLocaleDateString(),
@@ -96,18 +96,18 @@ class NotificationService {
 
       // Send notifications to all admin users
       const notificationPromises = admins.map(admin => 
-        this.sendEmailNotification(admin.email, notificationData, 'profile')
+        this.sendEmailNotification(admin.email_c, notificationData, 'profile')
       );
 
       await Promise.all(notificationPromises);
       
       // Log notification for debugging
-      console.log(`Sent profile update notifications for ${updatedUser.name} with ${changes.length} changes`);
+      console.log(`Sent profile update notifications for ${updatedUser.Name} with ${changes.length} changes`);
       
       return {
         success: true,
         recipientCount: admins.length,
-        participant: updatedUser.name,
+        participant: updatedUser.Name,
         changes: changes.length
       };
       
@@ -181,7 +181,7 @@ class NotificationService {
 
   async getAdminUsers() {
     const allUsers = await usersService.getAll();
-    return allUsers.filter(user => user.role === 'admin');
+    return allUsers.filter(user => user.role_c === 'admin');
   }
 
   isMockMode() {

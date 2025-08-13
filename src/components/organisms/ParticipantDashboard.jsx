@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { sectionsService } from "@/services/api/sectionsService";
 import { progressService } from "@/services/api/progressService";
+import { questionsService } from "@/services/api/questionsService";
 import ApperIcon from "@/components/ApperIcon";
 import SectionCard from "@/components/molecules/SectionCard";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 
-const ParticipantDashboard = ({ currentUser }) => {
+const ParticipantDashboard = () => {
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.user.user);
   const [sections, setSections] = useState([]);
   const [progress, setProgress] = useState({});
   const [loading, setLoading] = useState(true);
@@ -20,15 +25,23 @@ const ParticipantDashboard = ({ currentUser }) => {
       
       const [sectionsData, progressData] = await Promise.all([
         sectionsService.getAll(),
-        progressService.getByUserId(currentUser.Id)
+        progressService.getByUserId(currentUser.Id || currentUser.userId)
       ]);
       
-      setSections(sectionsData);
+      // Add questions to sections
+      const sectionsWithQuestions = await Promise.all(
+        sectionsData.map(async (section) => {
+          const questions = await questionsService.getBySectionId(section.Id);
+          return { ...section, questions };
+        })
+      );
+      
+      setSections(sectionsWithQuestions);
       
       // Convert progress array to object for easier lookup
       const progressMap = {};
       progressData.forEach(p => {
-        progressMap[p.sectionId] = p.completionPercentage;
+        progressMap[p.section_id_c] = p.completion_percentage_c;
       });
       setProgress(progressMap);
       
@@ -41,7 +54,7 @@ const ParticipantDashboard = ({ currentUser }) => {
   };
 
   useEffect(() => {
-    if (currentUser?.Id) {
+    if (currentUser?.Id || currentUser?.userId) {
       loadData();
     }
   }, [currentUser]);
@@ -63,18 +76,18 @@ const ParticipantDashboard = ({ currentUser }) => {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-<div className="bg-gradient-to-r from-primary-500 via-primary-600 to-secondary-600 rounded-2xl p-8 text-white">
+      <div className="bg-gradient-to-r from-primary-500 via-primary-600 to-secondary-600 rounded-2xl p-8 text-white">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="font-display text-3xl font-bold mb-2">
-              Welcome back, {currentUser?.name}
+              Welcome back, {currentUser?.Name || currentUser?.firstName || 'User'}
             </h2>
             <p className="text-primary-100 mb-6">
               Continue your family business journey by exploring the four foundational pillars.
             </p>
           </div>
           <button
-            onClick={() => window.location.href = '/profile'}
+            onClick={() => navigate('/profile')}
             className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
           >
             <ApperIcon name="Settings" size={16} />

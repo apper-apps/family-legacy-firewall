@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-class SectionsService {
+class QuestionsService {
   constructor() {
     // Initialize ApperClient
     const { ApperClient } = window.ApperSDK;
@@ -8,7 +8,7 @@ class SectionsService {
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
       apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
     });
-    this.tableName = 'section_c';
+    this.tableName = 'question_c';
   }
 
   async getAll() {
@@ -16,11 +16,13 @@ class SectionsService {
       const params = {
         fields: [
           { field: { Name: "Name" } },
-          { field: { Name: "title_c" } },
-          { field: { Name: "subtitle_c" } },
-          { field: { Name: "order_c" } }
+          { field: { Name: "text_c" } },
+          { 
+            field: { Name: "section_id_c" },
+            referenceField: { field: { Name: "Name" } }
+          }
         ],
-        orderBy: [{ fieldName: "order_c", sorttype: "ASC" }]
+        orderBy: [{ fieldName: "Id", sorttype: "ASC" }]
       };
 
       const response = await this.apperClient.fetchRecords(this.tableName, params);
@@ -34,7 +36,7 @@ class SectionsService {
       return response.data || [];
     } catch (error) {
       if (error?.response?.data?.message) {
-        console.error("Error fetching sections:", error?.response?.data?.message);
+        console.error("Error fetching questions:", error?.response?.data?.message);
       } else {
         console.error(error.message);
       }
@@ -47,38 +49,76 @@ class SectionsService {
       const params = {
         fields: [
           { field: { Name: "Name" } },
-          { field: { Name: "title_c" } },
-          { field: { Name: "subtitle_c" } },
-          { field: { Name: "order_c" } }
+          { field: { Name: "text_c" } },
+          { 
+            field: { Name: "section_id_c" },
+            referenceField: { field: { Name: "Name" } }
+          }
         ]
       };
 
       const response = await this.apperClient.getRecordById(this.tableName, id, params);
       
       if (!response || !response.data) {
-        throw new Error("Section not found");
+        return null;
       }
 
       return response.data;
     } catch (error) {
       if (error?.response?.data?.message) {
-        console.error(`Error fetching section with ID ${id}:`, error?.response?.data?.message);
+        console.error(`Error fetching question with ID ${id}:`, error?.response?.data?.message);
       } else {
         console.error(error.message);
       }
-      throw new Error("Section not found");
+      return null;
     }
   }
 
-  async create(sectionData) {
+  async getBySectionId(sectionId) {
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "text_c" } },
+          { field: { Name: "section_id_c" } }
+        ],
+        where: [
+          {
+            FieldName: "section_id_c",
+            Operator: "EqualTo",
+            Values: [parseInt(sectionId)]
+          }
+        ],
+        orderBy: [{ fieldName: "Id", sorttype: "ASC" }]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching questions by section:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
+  }
+
+  async create(questionData) {
     try {
       const params = {
         records: [
           {
-            Name: sectionData.Name,
-            title_c: sectionData.title_c,
-            subtitle_c: sectionData.subtitle_c,
-            order_c: sectionData.order_c
+            Name: questionData.Name,
+            text_c: questionData.text_c,
+            section_id_c: parseInt(questionData.section_id_c)
           }
         ]
       };
@@ -96,7 +136,7 @@ class SectionsService {
         const failedRecords = response.results.filter(result => !result.success);
         
         if (failedRecords.length > 0) {
-          console.error(`Failed to create section records:${JSON.stringify(failedRecords)}`);
+          console.error(`Failed to create question records:${JSON.stringify(failedRecords)}`);
           
           failedRecords.forEach(record => {
             record.errors?.forEach(error => {
@@ -110,7 +150,7 @@ class SectionsService {
       }
     } catch (error) {
       if (error?.response?.data?.message) {
-        console.error("Error creating section:", error?.response?.data?.message);
+        console.error("Error creating question:", error?.response?.data?.message);
       } else {
         console.error(error.message);
       }
@@ -119,4 +159,4 @@ class SectionsService {
   }
 }
 
-export const sectionsService = new SectionsService();
+export const questionsService = new QuestionsService();

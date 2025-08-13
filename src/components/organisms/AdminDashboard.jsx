@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import Card from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usersService } from "@/services/api/usersService";
 import { progressService } from "@/services/api/progressService";
 import { sectionsService } from "@/services/api/sectionsService";
-import { useNavigate } from "react-router-dom";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
+import Dashboard from "@/components/pages/Dashboard";
 
 const AdminDashboard = () => {
   const [participants, setParticipants] = useState([]);
@@ -46,14 +47,14 @@ const AdminDashboard = () => {
   }, []);
 
   const getParticipantProgress = (participantId) => {
-    const userProgress = progressData.filter(p => p.userId === participantId);
-    const totalProgress = userProgress.reduce((sum, p) => sum + p.completionPercentage, 0);
+    const userProgress = progressData.filter(p => p.user_id_c === participantId);
+    const totalProgress = userProgress.reduce((sum, p) => sum + p.completion_percentage_c, 0);
     return userProgress.length > 0 ? totalProgress / sections.length : 0;
   };
 
   const getSectionProgress = (participantId, sectionId) => {
-    const progress = progressData.find(p => p.userId === participantId && p.sectionId === sectionId);
-    return progress ? progress.completionPercentage : 0;
+    const progress = progressData.find(p => p.user_id_c === participantId && p.section_id_c === sectionId);
+    return progress ? progress.completion_percentage_c : 0;
   };
 
   const viewParticipantDetails = (participantId) => {
@@ -124,7 +125,7 @@ const AdminDashboard = () => {
                 <th className="text-center py-3 px-4 font-medium text-gray-700">Overall Progress</th>
                 {sections.map(section => (
                   <th key={section.Id} className="text-center py-3 px-2 font-medium text-gray-700 text-sm">
-                    Section {section.Id}
+                    Section {section.order_c}
                   </th>
                 ))}
                 <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
@@ -141,8 +142,8 @@ const AdminDashboard = () => {
                           <ApperIcon name="User" size={16} className="text-primary-600" />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900">{participant.name}</div>
-                          <div className="text-sm text-gray-500">{participant.email}</div>
+                          <div className="font-medium text-gray-900">{participant.Name}</div>
+                          <div className="text-sm text-gray-500">{participant.email_c}</div>
                         </div>
                       </div>
                     </td>
@@ -201,9 +202,9 @@ const AdminDashboard = () => {
       {/* Section Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {sections.map(section => {
-          const sectionResponses = progressData.filter(p => p.sectionId === section.Id);
-          const completedCount = sectionResponses.filter(p => p.completionPercentage === 100).length;
-          const averageProgress = sectionResponses.reduce((sum, p) => sum + p.completionPercentage, 0) / Math.max(sectionResponses.length, 1);
+          const sectionResponses = progressData.filter(p => p.section_id_c === section.Id);
+          const completedCount = sectionResponses.filter(p => p.completion_percentage_c === 100).length;
+          const averageProgress = sectionResponses.reduce((sum, p) => sum + p.completion_percentage_c, 0) / Math.max(sectionResponses.length, 1);
           
           return (
             <Card key={section.Id} className="p-6">
@@ -212,8 +213,8 @@ const AdminDashboard = () => {
                   <ApperIcon name="FileText" size={20} className="text-accent-600" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Section {section.Id}</h4>
-                  <p className="text-sm text-gray-500">{section.title}</p>
+                  <h4 className="font-medium text-gray-900">Section {section.order_c}</h4>
+                  <p className="text-sm text-gray-500">{section.title_c}</p>
                 </div>
               </div>
               <div className="space-y-2">

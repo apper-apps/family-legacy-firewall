@@ -1,146 +1,303 @@
-import usersData from "@/services/mockData/users.json";
-import { notificationService } from "@/services/api/notificationService";
+import { toast } from 'react-toastify';
 
-let users = [...usersData];
 class UsersService {
+  constructor() {
+    // Initialize ApperClient
+    const { ApperClient } = window.ApperSDK;
+    this.apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+    this.tableName = 'user_c';
+  }
+
   async getAll() {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return [...users];
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "role_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "position_c" } },
+          { field: { Name: "bio_c" } },
+          { field: { Name: "created_at_c" } }
+        ],
+        orderBy: [{ fieldName: "Name", sorttype: "ASC" }]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching users:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async getById(id) {
-    // Validate id parameter
-    if (!Number.isInteger(id) || id <= 0) {
-      throw new Error('Invalid user ID');
-    }
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "role_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "position_c" } },
+          { field: { Name: "bio_c" } },
+          { field: { Name: "created_at_c" } }
+        ]
+      };
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 200));
-    
-    const user = users.find(u => u.Id === id);
-    return user ? { ...user } : null;
+      const response = await this.apperClient.getRecordById(this.tableName, id, params);
+      
+      if (!response || !response.data) {
+        return null;
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error(`Error fetching user with ID ${id}:`, error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return null;
+    }
   }
 
   async create(userData) {
-    // Auto-generate ID
-    const newId = users.length > 0 ? Math.max(...users.map(u => u.Id)) + 1 : 1;
-    
-    const newUser = {
-      ...userData,
-      Id: newId,
-      createdAt: new Date().toISOString()
-    };
+    try {
+      const params = {
+        records: [
+          {
+            Name: userData.Name,
+            email_c: userData.email_c,
+            role_c: userData.role_c,
+            phone_c: userData.phone_c,
+            company_c: userData.company_c,
+            position_c: userData.position_c,
+            bio_c: userData.bio_c
+          }
+        ]
+      };
 
-    users.push(newUser);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    return { ...newUser };
-  }
-
-async update(id, userData) {
-    // Validate id parameter
-    if (!Number.isInteger(id) || id <= 0) {
-      throw new Error('Invalid user ID');
-    }
-
-    const userIndex = users.findIndex(u => u.Id === id);
-    
-    if (userIndex === -1) {
-      throw new Error('User not found');
-    }
-
-    const originalUser = { ...users[userIndex] };
-    const updatedUser = {
-      ...users[userIndex],
-      ...userData,
-      Id: id, // Ensure ID cannot be changed
-      updatedAt: new Date().toISOString()
-    };
-
-    users[userIndex] = updatedUser;
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    // Send notification to admins if this is a participant profile update
-    if (updatedUser.role === 'participant') {
-      try {
-        await notificationService.sendProfileUpdateNotification(id, originalUser, updatedUser);
-      } catch (error) {
-        console.error('Failed to send profile update notification:', error);
-        // Don't fail the update if notification fails
+      const response = await this.apperClient.createRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
       }
-    }
-    
-    return { ...updatedUser };
-  }
 
-  async delete(id) {
-    // Validate id parameter
-    if (!Number.isInteger(id) || id <= 0) {
-      throw new Error('Invalid user ID');
-    }
-
-    const userIndex = users.findIndex(u => u.Id === id);
-    
-    if (userIndex === -1) {
-      throw new Error('User not found');
-    }
-
-    users.splice(userIndex, 1);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 200));
-    
-    return true;
-  }
-
-  async authenticate(email, password) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    
-    if (!user) {
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create user records:${JSON.stringify(failedRecords)}`);
+          
+          failedRecords.forEach(record => {
+            record.errors?.forEach(error => {
+              toast.error(`${error.fieldLabel}: ${error.message}`);
+            });
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        return successfulRecords.length > 0 ? successfulRecords[0].data : null;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error creating user:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
       return null;
     }
-    
-    // Simple password validation for demo
-    // In a real app, this would check against hashed passwords
-    const validPassword = this.validatePassword(user, password);
-    
-    if (!validPassword) {
-      return null;
-    }
-    
-    return { ...user };
   }
 
-  validatePassword(user, password) {
-    // Simple password validation based on role
-    // In a real app, this would check against hashed passwords
-    if (user.role === 'admin') {
-      return password === 'admin123';
+  async update(id, userData) {
+    try {
+      const params = {
+        records: [
+          {
+            Id: id,
+            Name: userData.Name,
+            email_c: userData.email_c,
+            phone_c: userData.phone_c,
+            company_c: userData.company_c,
+            position_c: userData.position_c,
+            bio_c: userData.bio_c
+          }
+        ]
+      };
+
+      const response = await this.apperClient.updateRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update user records:${JSON.stringify(failedUpdates)}`);
+          
+          failedUpdates.forEach(record => {
+            record.errors?.forEach(error => {
+              toast.error(`${error.fieldLabel}: ${error.message}`);
+            });
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        return successfulUpdates.length > 0 ? successfulUpdates[0].data : null;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating user:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return null;
     }
-    
-    if (user.role === 'participant') {
-      return password === 'participant123';
+  }
+
+  async delete(recordIds) {
+    try {
+      const params = {
+        RecordIds: Array.isArray(recordIds) ? recordIds : [recordIds]
+      };
+
+      const response = await this.apperClient.deleteRecord(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return false;
+      }
+
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete user records:${JSON.stringify(failedDeletions)}`);
+          
+          failedDeletions.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        return successfulDeletions.length === params.RecordIds.length;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error deleting users:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return false;
     }
-    
-    return false;
   }
 
   async getParticipants() {
-    const allUsers = await this.getAll();
-    return allUsers.filter(user => user.role === 'participant');
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "role_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "position_c" } },
+          { field: { Name: "bio_c" } },
+          { field: { Name: "created_at_c" } }
+        ],
+        where: [
+          {
+            FieldName: "role_c",
+            Operator: "EqualTo",
+            Values: ["participant"]
+          }
+        ]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching participants:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 
   async getAdmins() {
-    const allUsers = await this.getAll();
-    return allUsers.filter(user => user.role === 'admin');
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "role_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "position_c" } },
+          { field: { Name: "bio_c" } },
+          { field: { Name: "created_at_c" } }
+        ],
+        where: [
+          {
+            FieldName: "role_c",
+            Operator: "EqualTo",
+            Values: ["admin"]
+          }
+        ]
+      };
+
+      const response = await this.apperClient.fetchRecords(this.tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching admins:", error?.response?.data?.message);
+      } else {
+        console.error(error.message);
+      }
+      return [];
+    }
   }
 }
 
