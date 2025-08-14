@@ -131,62 +131,128 @@ function AppContent() {
         <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
         
         {/* Protected Routes */}
-        <Route path="/*" element={
-          isAuthenticated ? (
-            <div className="min-h-screen bg-gray-50">
-              <Header />
-              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route 
-                    path="/profile" 
-                    element={
-                      currentUser?.role_c === "participant" ? (
-                        <ParticipantProfile />
-                      ) : (
-                        <Dashboard />
-                      )
-                    } 
-                  />
-                  <Route 
-                    path="/admin" 
-                    element={
-                      currentUser?.role_c === "admin" ? (
-                        <Dashboard />
-                      ) : (
-                        <Dashboard />
-                      )
-                    } 
-                  />
-                  <Route 
-                    path="/sections/:sectionId" 
-                    element={
-                      currentUser?.role_c === "participant" ? (
-                        <SectionQuestions />
-                      ) : (
-                        <Dashboard />
-                      )
-                    } 
-                  />
-                  <Route 
-                    path="/admin/participant/:participantId" 
-                    element={
-                      currentUser?.role_c === "admin" ? (
-                        <ParticipantDetail />
-                      ) : (
-                        <Dashboard />
-                      )
-                    } 
-                  />
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="*" element={<Dashboard />} />
-                </Routes>
-              </main>
-            </div>
-          ) : (
-            <Login />
-          )
-        } />
+{/* Protected Routes */}
+        <Route 
+          path="/dashboard" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <Dashboard />
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  {currentUser?.role_c === "participant" ? (
+                    <ParticipantProfile />
+                  ) : (
+                    <Dashboard />
+                  )}
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  {currentUser?.role_c === "admin" ? (
+                    <Dashboard />
+                  ) : (
+                    <Dashboard />
+                  )}
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="/sections/:sectionId" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  {currentUser?.role_c === "participant" ? (
+                    <SectionQuestions />
+                  ) : (
+                    <Dashboard />
+                  )}
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="/admin/participant/:participantId" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  {currentUser?.role_c === "admin" ? (
+                    <ParticipantDetail />
+                  ) : (
+                    <Dashboard />
+                  )}
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="/" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <Dashboard />
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
+        <Route 
+          path="*" 
+          element={
+            isAuthenticated ? (
+              <div className="min-h-screen bg-gray-50">
+                <Header />
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <Dashboard />
+                </main>
+              </div>
+            ) : (
+              <Login />
+            )
+          } 
+        />
       </Routes>
       
       <ToastContainer
