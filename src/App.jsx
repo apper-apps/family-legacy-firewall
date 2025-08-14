@@ -1,20 +1,23 @@
-import { createContext, useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import { setUser, clearUser } from './store/userSlice';
-import Login from '@/components/pages/Login';
-import Signup from '@/components/pages/Signup';
-import Callback from '@/components/pages/Callback';
-import ErrorPage from '@/components/pages/ErrorPage';
-import ResetPassword from '@/components/pages/ResetPassword';
-import PromptPassword from '@/components/pages/PromptPassword';
-import Dashboard from '@/components/pages/Dashboard';
-import SectionQuestions from '@/components/pages/SectionQuestions';
-import ParticipantDetail from '@/components/pages/ParticipantDetail';
-import ParticipantProfile from '@/components/pages/ParticipantProfile';
-import Header from '@/components/organisms/Header';
+import React, { createContext, useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import Header from "@/components/organisms/Header";
+import ParticipantDetail from "@/components/pages/ParticipantDetail";
+import SectionQuestions from "@/components/pages/SectionQuestions";
+import Callback from "@/components/pages/Callback";
+import ParticipantProfile from "@/components/pages/ParticipantProfile";
+import Signup from "@/components/pages/Signup";
+import Dashboard from "@/components/pages/Dashboard";
+import Login from "@/components/pages/Login";
+import PromptPassword from "@/components/pages/PromptPassword";
+import ErrorPage from "@/components/pages/ErrorPage";
+import ResetPassword from "@/components/pages/ResetPassword";
+import progressData from "@/services/mockData/progress.json";
+import sectionsData from "@/services/mockData/sections.json";
+import responsesData from "@/services/mockData/responses.json";
+import usersData from "@/services/mockData/users.json";
+import { clearUser, setUser } from "@/store/userSlice";
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -115,6 +118,7 @@ function AppContent() {
     }
   };
   
+
   // Don't render routes until initialization is complete
   if (!isInitialized) {
     return <div className="loading flex items-center justify-center p-6 h-full w-full"><svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><path d="M12 2v4"></path><path d="m16.2 7.8 2.9-2.9"></path><path d="M18 12h4"></path><path d="m16.2 16.2 2.9 2.9"></path><path d="M12 18v4"></path><path d="m4.9 19.1 2.9-2.9"></path><path d="M2 12h4"></path><path d="m4.9 4.9 2.9 2.9"></path></svg></div>;
@@ -131,7 +135,6 @@ function AppContent() {
         <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
         
         {/* Protected Routes */}
-{/* Protected Routes */}
         <Route 
           path="/dashboard" 
           element={
