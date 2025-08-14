@@ -19,9 +19,8 @@ import responsesData from "@/services/mockData/responses.json";
 import usersData from "@/services/mockData/users.json";
 import { clearUser, setUser } from "@/store/userSlice";
 
-// Create auth context
+// Create auth context for backward compatibility
 export const AuthContext = createContext(null);
-
 function AppContent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -99,9 +98,10 @@ function AppContent() {
       },
       onError: function(error) {
         console.error("Authentication failed:", error);
+        setIsInitialized(true);
       }
     });
-  }, []);// No props and state should be bound
+  }, [navigate, dispatch]);
   
   // Authentication methods to share via context
   const authMethods = {
@@ -117,11 +117,20 @@ function AppContent() {
       }
     }
   };
-  
-
-  // Don't render routes until initialization is complete
+// Don't render routes until initialization is complete
   if (!isInitialized) {
-    return <div className="loading flex items-center justify-center p-6 h-full w-full"><svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><path d="M12 2v4"></path><path d="m16.2 7.8 2.9-2.9"></path><path d="M18 12h4"></path><path d="m16.2 16.2 2.9 2.9"></path><path d="M12 18v4"></path><path d="m4.9 19.1 2.9-2.9"></path><path d="M2 12h4"></path><path d="m4.9 4.9 2.9 2.9"></path></svg></div>;
+    return <div className="loading flex items-center justify-center p-6 h-full w-full">
+      <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v4"></path>
+        <path d="m16.2 7.8 2.9-2.9"></path>
+        <path d="M18 12h4"></path>
+        <path d="m16.2 16.2 2.9 2.9"></path>
+        <path d="M12 18v4"></path>
+        <path d="m4.9 19.1 2.9-2.9"></path>
+        <path d="M2 12h4"></path>
+        <path d="m4.9 4.9 2.9 2.9"></path>
+      </svg>
+    </div>;
   }
   
   return (
