@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { AuthContext } from "@/contexts/AuthContext";
-import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
+import React, { useContext } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { AuthContext } from '../../App'
+import ApperIcon from '@/components/ApperIcon'
+import Button from '@/components/atoms/Button'
 
 const Header = () => {
   const location = useLocation();
